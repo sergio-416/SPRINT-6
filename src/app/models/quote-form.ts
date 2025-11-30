@@ -1,5 +1,9 @@
 export interface QuoteFormModel {
   seoSelected: boolean;
   adsSelected: boolean;
-  webSelected: boolean;
+  webConfig: {
+    selected: boolean;
+    pages: number;
+    languages: number;
+  };
 }
