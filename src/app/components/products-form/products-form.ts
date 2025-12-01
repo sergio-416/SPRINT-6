@@ -3,10 +3,11 @@ import { Field, form, min } from '@angular/forms/signals';
 import { QuoteFormModel } from '../../models/quote-form';
 import { Budget } from '../../services/budget';
 import { WebsitePanel } from '../website-panel/website-panel';
+import { PageHeader } from '../page-header/page-header';
 
 @Component({
   selector: 'app-products-form',
-  imports: [Field, WebsitePanel],
+  imports: [Field, WebsitePanel, PageHeader],
   templateUrl: './products-form.html',
   styleUrl: './products-form.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
