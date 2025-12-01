@@ -18,10 +18,12 @@ describe('WebsitePanel', () => {
     const mockModel = signal({
       pages: 1,
       languages: 1,
+      selected: true,
     });
-    const mockForm = form(mockModel);
-    component.webConfigFields = mockForm;
 
+    const mockForm = TestBed.runInInjectionContext(() => form(mockModel));
+
+    fixture.componentRef.setInput('webConfigFields', mockForm);
     fixture.detectChanges();
   });
 
@@ -72,11 +74,11 @@ describe('WebsitePanel', () => {
     incrementButton.click();
     fixture.detectChanges();
 
-    expect(component.webConfigFields.pages().value()).toBe(2);
+    expect(component.webConfigFields().pages().value()).toBe(2);
   });
 
   it('should decrement pages when decrement button is clicked', () => {
-    component.webConfigFields.pages().value.set(5);
+    component.webConfigFields().pages().value.set(5);
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement;
@@ -85,11 +87,11 @@ describe('WebsitePanel', () => {
     decrementButton.click();
     fixture.detectChanges();
 
-    expect(component.webConfigFields.pages().value()).toBe(4);
+    expect(component.webConfigFields().pages().value()).toBe(4);
   });
 
   it('should not decrement pages below 1', () => {
-    component.webConfigFields.pages().value.set(1);
+    component.webConfigFields().pages().value.set(1);
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement;
@@ -98,7 +100,7 @@ describe('WebsitePanel', () => {
     decrementButton.click();
     fixture.detectChanges();
 
-    expect(component.webConfigFields.pages().value()).toBe(1);
+    expect(component.webConfigFields().pages().value()).toBe(1);
   });
 
   it('should increment languages when increment button is clicked', () => {
@@ -108,11 +110,11 @@ describe('WebsitePanel', () => {
     incrementButton.click();
     fixture.detectChanges();
 
-    expect(component.webConfigFields.languages().value()).toBe(2);
+    expect(component.webConfigFields().languages().value()).toBe(2);
   });
 
   it('should not decrement languages below 1', () => {
-    component.webConfigFields.languages().value.set(1);
+    component.webConfigFields().languages().value.set(1);
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement;
@@ -121,7 +123,7 @@ describe('WebsitePanel', () => {
     decrementButton.click();
     fixture.detectChanges();
 
-    expect(component.webConfigFields.languages().value()).toBe(1);
+    expect(component.webConfigFields().languages().value()).toBe(1);
   });
 
   it('should update pages value when input changes', () => {
@@ -132,6 +134,6 @@ describe('WebsitePanel', () => {
     pagesInput.dispatchEvent(new Event('input'));
     fixture.detectChanges();
 
-    expect(component.webConfigFields.pages().value()).toBe(10);
+    expect(component.webConfigFields().pages().value()).toBe(10);
   });
 });

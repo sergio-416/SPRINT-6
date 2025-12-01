@@ -49,9 +49,9 @@ describe('ProductsForm', () => {
     expect(component.totalPrice()).toBe(400);
   });
 
-  it('should calculate total as 500 when only Web is selected without customization', () => {
+  it('should calculate total as 530 when Web is selected with default configuration', () => {
     component.quoteForm.webConfig.selected().value.set(true);
-    expect(component.totalPrice()).toBe(500);
+    expect(component.totalPrice()).toBe(530);
   });
 
   it('should calculate total as 800 when Web is selected with 5 pages and 2 languages', () => {
@@ -61,11 +61,11 @@ describe('ProductsForm', () => {
     expect(component.totalPrice()).toBe(800);
   });
 
-  it('should calculate total as 1200 when all services are selected without customization', () => {
+  it('should calculate total as 1230 when all services are selected with default configuration', () => {
     component.quoteForm.seoSelected().value.set(true);
     component.quoteForm.adsSelected().value.set(true);
     component.quoteForm.webConfig.selected().value.set(true);
-    expect(component.totalPrice()).toBe(1200);
+    expect(component.totalPrice()).toBe(1230);
   });
 
   it('should render three service checkboxes', () => {
