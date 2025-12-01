@@ -48,15 +48,16 @@ export class HelpModal {
   }
 
   onBackdropClick(event: MouseEvent): void {
-    const dialogElement = event.target as HTMLDialogElement;
-    const rect = dialogElement.getBoundingClientRect();
-    const clickedOutside =
-      event.clientX < rect.left ||
-      event.clientX > rect.right ||
-      event.clientY < rect.top ||
-      event.clientY > rect.bottom;
+    const dialog = event.currentTarget as HTMLDialogElement;
+    const rect = dialog.getBoundingClientRect();
 
-    if (clickedOutside) {
+    const clickedInDialog =
+      event.clientX >= rect.left &&
+      event.clientX <= rect.right &&
+      event.clientY >= rect.top &&
+      event.clientY <= rect.bottom;
+
+    if (!clickedInDialog) {
       this.close();
     }
   }
