@@ -136,4 +136,16 @@ describe('WebsitePanel', () => {
 
     expect(component.webConfigFields().pages().value()).toBe(10);
   });
+
+  it('should render help button for pages', () => {
+    const compiled = fixture.nativeElement;
+    const helpButton = compiled.querySelector('[data-testid="pages-help-button"]');
+    expect(helpButton).not.toBeNull();
+  });
+
+  it('should render help button for languages', () => {
+    const compiled = fixture.nativeElement;
+    const helpButton = compiled.querySelector('[data-testid="languages-help-button"]');
+    expect(helpButton).not.toBeNull();
+  });
 });
