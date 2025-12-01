@@ -1,0 +1,75 @@
+<div class="p-6 bg-white border border-gray-200 rounded-lg mt-4">
+  <h3 class="text-lg font-semibold text-gray-800 mb-4">Website Configuration</h3>
+
+  <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-2">
+      <label class="text-sm font-medium text-gray-700">Number of Pages</label>
+      <div class="flex items-center gap-3">
+        <button
+          type="button"
+          (click)="decrementPages()"
+          class="w-10 h-10 flex items-center justify-center bg-blue-600 text-white rounded hover:bg-blue-700 active:bg-blue-800 transition-colors font-bold text-lg"
+          data-testid="pages-decrement"
+        >
+          -
+        </button>
+        <input
+          type="number"
+          [field]="webConfigFields().pages"
+          class="flex-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          data-testid="pages-input"
+        />
+        <button
+          type="button"
+          (click)="incrementPages()"
+          class="w-10 h-10 flex items-center justify-center bg-blue-600 text-white rounded hover:bg-blue-700 active:bg-blue-800 transition-colors font-bold text-lg"
+          data-testid="pages-increment"
+        >
+          +
+        </button>
+      </div>
+      @if (webConfigFields().pages().touched() && webConfigFields().pages().invalid()) {
+      <div class="text-sm text-red-600 mt-1">
+        @for (error of webConfigFields().pages().errors(); track error) {
+        <p>{{ error.message }}</p>
+        }
+      </div>
+      }
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label class="text-sm font-medium text-gray-700">Number of Languages</label>
+      <div class="flex items-center gap-3">
+        <button
+          type="button"
+          (click)="decrementLanguages()"
+          class="w-10 h-10 flex items-center justify-center bg-blue-600 text-white rounded hover:bg-blue-700 active:bg-blue-800 transition-colors font-bold text-lg"
+          data-testid="languages-decrement"
+        >
+          -
+        </button>
+        <input
+          type="number"
+          [field]="webConfigFields().languages"
+          class="flex-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          data-testid="languages-input"
+        />
+        <button
+          type="button"
+          (click)="incrementLanguages()"
+          class="w-10 h-10 flex items-center justify-center bg-blue-600 text-white rounded hover:bg-blue-700 active:bg-blue-800 transition-colors font-bold text-lg"
+          data-testid="languages-increment"
+        >
+          +
+        </button>
+      </div>
+      @if (webConfigFields().languages().touched() && webConfigFields().languages().invalid()) {
+      <div class="text-sm text-red-600 mt-1">
+        @for (error of webConfigFields().languages().errors(); track error) {
+        <p>{{ error.message }}</p>
+        }
+      </div>
+      }
+    </div>
+  </div>
+</div>

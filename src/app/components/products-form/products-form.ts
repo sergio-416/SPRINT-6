@@ -1,39 +1,47 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
-import { Field, form } from '@angular/forms/signals';
+import { Field, form, min } from '@angular/forms/signals';
 import { QuoteFormModel } from '../../models/quote-form';
+import { Budget } from '../../services/budget';
+import { WebsitePanel } from '../website-panel/website-panel';
 
 @Component({
   selector: 'app-products-form',
-  imports: [Field],
+  imports: [Field, WebsitePanel],
   templateUrl: './products-form.html',
   styleUrl: './products-form.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsForm {
-  private readonly SEO_PRICE = 300;
-  private readonly ADS_PRICE = 400;
-  private readonly WEB_PRICE = 500;
-
   quoteModel = signal<QuoteFormModel>({
     seoSelected: false,
     adsSelected: false,
-    webSelected: false,
+    webConfig: {
+      selected: false,
+      pages: 1,
+      languages: 1,
+    },
   });
 
-  quoteForm = form(this.quoteModel);
+  quoteForm = form(this.quoteModel, (schemaPath) => {
+    min(schemaPath.webConfig.pages, 1, { message: 'Pages must be at least 1' });
+    min(schemaPath.webConfig.languages, 1, { message: 'Languages must be at least 1' });
+  });
 
   totalPrice = computed(() => {
     const formValue = this.quoteForm().value();
-    let total = 0;
 
-    if (formValue.seoSelected) total += this.SEO_PRICE;
-    if (formValue.adsSelected) total += this.ADS_PRICE;
-    if (formValue.webSelected) total += this.WEB_PRICE;
-
-    return total;
+    return this.budgetService.calculateTotalPrice(
+      formValue.seoSelected,
+      formValue.adsSelected,
+      formValue.webConfig.selected,
+      formValue.webConfig.pages,
+      formValue.webConfig.languages
+    );
   });
 
   submissionStatus = signal<'idle' | 'submitted'>('idle');
+
+  constructor(private budgetService: Budget) {}
 
   onSubmit(event: Event): void {
     event.preventDefault();
