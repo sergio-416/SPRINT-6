@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, effect, input, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  ElementRef,
+  input,
+  signal,
+  viewChild,
+} from '@angular/core';
 
 @Component({
   selector: 'app-help-modal',
@@ -12,14 +20,24 @@ export class HelpModal {
   content = input.required<string>();
   isOpen = signal(false);
 
+  private dialogElement = viewChild<ElementRef<HTMLDialogElement>>('dialogElement');
+
   constructor() {
     effect(() => {
-      const dialogElement = document.querySelector('dialog');
-      if (dialogElement) {
+      const dialog = this.dialogElement()?.nativeElement;
+      if (dialog) {
         if (this.isOpen()) {
-          dialogElement.showModal();
+          if (typeof dialog.showModal === 'function') {
+            dialog.showModal();
+          } else {
+            dialog.setAttribute('open', '');
+          }
         } else {
-          dialogElement.close();
+          if (typeof dialog.close === 'function') {
+            dialog.close();
+          } else {
+            dialog.removeAttribute('open');
+          }
         }
       }
     });

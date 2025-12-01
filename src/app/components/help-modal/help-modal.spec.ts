@@ -12,6 +12,10 @@ describe('HelpModal', () => {
 
     fixture = TestBed.createComponent(HelpModal);
     component = fixture.componentInstance;
+
+    fixture.componentRef.setInput('title', 'Default Test Title');
+    fixture.componentRef.setInput('content', 'Default test content');
+
     fixture.detectChanges();
   });
 
@@ -22,7 +26,7 @@ describe('HelpModal', () => {
   it('should not show modal initially when isOpen is false', () => {
     const compiled = fixture.nativeElement;
     const dialog = compiled.querySelector('dialog');
-    expect(dialog.open).toBe(false);
+    expect(dialog.hasAttribute('open')).toBe(false);
   });
 
   it('should show modal when isOpen signal is set to true', () => {
@@ -31,7 +35,7 @@ describe('HelpModal', () => {
 
     const compiled = fixture.nativeElement;
     const dialog = compiled.querySelector('dialog');
-    expect(dialog.open).toBe(true);
+    expect(dialog.hasAttribute('open')).toBe(true);
   });
 
   it('should render title when provided', () => {
@@ -73,7 +77,7 @@ describe('HelpModal', () => {
     fixture.detectChanges();
 
     const dialog = compiled.querySelector('dialog');
-    expect(dialog.open).toBe(false);
+    expect(dialog.hasAttribute('open')).toBe(false);
   });
 
   it('should close modal when backdrop is clicked', () => {
@@ -83,14 +87,17 @@ describe('HelpModal', () => {
     const compiled = fixture.nativeElement;
     const dialog = compiled.querySelector('dialog');
 
-    dialog.dispatchEvent(
-      new MouseEvent('click', {
-        bubbles: true,
-        cancelable: true,
-      })
-    );
+    const rect = dialog.getBoundingClientRect();
+    const clickEvent = new MouseEvent('click', {
+      bubbles: true,
+      cancelable: true,
+      clientX: rect.left - 10,
+      clientY: rect.top - 10,
+    });
+
+    dialog.dispatchEvent(clickEvent);
     fixture.detectChanges();
 
-    expect(dialog.open).toBe(false);
+    expect(dialog.hasAttribute('open')).toBe(false);
   });
 });
