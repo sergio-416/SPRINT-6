@@ -1,8 +1,8 @@
-<div class="border-t border-gray-200 pt-6 mt-2">
-  <div class="flex flex-col gap-6">
-    <div class="flex flex-col gap-3">
-      <div class="flex items-center gap-2 mb-2">
-        <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+<div class="border-t border-gray-200 pt-6 mt-4">
+  <div class="flex flex-col gap-4 items-end">
+    <div class="flex items-center gap-6 w-full justify-end">
+      <div class="flex items-center gap-1.5">
+        <svg class="w-3.5 h-3.5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
           <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
           <path
             fill-rule="evenodd"
@@ -10,15 +10,15 @@
             clip-rule="evenodd"
           />
         </svg>
-        <label class="text-sm font-semibold text-gray-700">Number of Pages</label>
+        <label class="text-xs font-medium text-gray-700 whitespace-nowrap">Number of Pages</label>
         <button
           type="button"
           (click)="openPagesHelp()"
-          class="text-blue-600 hover:text-blue-700 transition-colors ml-1"
+          class="text-blue-500 hover:text-blue-600 transition-colors"
           data-testid="pages-help-button"
           aria-label="Help about pages"
         >
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
             <path
               fill-rule="evenodd"
               d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"
@@ -27,11 +27,12 @@
           </svg>
         </button>
       </div>
-      <div class="flex items-center gap-3">
+
+      <div class="flex items-center gap-2">
         <button
           type="button"
           (click)="decrementPages()"
-          class="w-10 h-10 flex items-center justify-center bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 active:bg-gray-300 transition-colors font-bold text-xl border border-gray-300"
+          class="w-7 h-7 flex items-center justify-center bg-white text-gray-600 rounded border border-gray-300 hover:bg-gray-50 active:bg-gray-100 transition-colors text-base font-medium"
           data-testid="pages-decrement"
         >
           −
@@ -39,45 +40,48 @@
         <input
           type="number"
           [field]="webConfigFields().pages"
-          class="flex-1 px-4 py-3 text-center text-lg font-semibold border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          class="w-16 h-7 px-3 text-center text-sm font-medium border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-400"
           data-testid="pages-input"
         />
         <button
           type="button"
           (click)="incrementPages()"
-          class="w-10 h-10 flex items-center justify-center bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 active:bg-gray-300 transition-colors font-bold text-xl border border-gray-300"
+          class="w-7 h-7 flex items-center justify-center bg-white text-gray-600 rounded border border-gray-300 hover:bg-gray-50 active:bg-gray-100 transition-colors text-base font-medium"
           data-testid="pages-increment"
         >
           +
         </button>
       </div>
-      @if (webConfigFields().pages().touched() && webConfigFields().pages().invalid()) {
-      <div class="text-sm text-red-600 mt-1">
-        @for (error of webConfigFields().pages().errors(); track error) {
-        <p>{{ error.message }}</p>
-        }
-      </div>
-      }
     </div>
 
-    <div class="flex flex-col gap-3">
-      <div class="flex items-center gap-2 mb-2">
-        <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+    @if (webConfigFields().pages().touched() && webConfigFields().pages().invalid()) {
+    <div class="text-xs text-red-600 w-full text-right pr-4">
+      @for (error of webConfigFields().pages().errors(); track error) {
+      <p>{{ error.message }}</p>
+      }
+    </div>
+    }
+
+    <div class="flex items-center gap-6 w-full justify-end">
+      <div class="flex items-center gap-1.5">
+        <svg class="w-3.5 h-3.5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
           <path
             fill-rule="evenodd"
             d="M7 2a1 1 0 011 1v1h3a1 1 0 110 2H9.578a18.87 18.87 0 01-1.724 4.78c.29.354.596.696.914 1.026a1 1 0 11-1.44 1.389c-.188-.196-.373-.396-.554-.6a19.098 19.098 0 01-3.107 3.567 1 1 0 01-1.334-1.49 17.087 17.087 0 003.13-3.733 18.992 18.992 0 01-1.487-2.494 1 1 0 111.79-.89c.234.47.489.928.764 1.372.417-.934.752-1.913.997-2.927H3a1 1 0 110-2h3V3a1 1 0 011-1zm6 6a1 1 0 01.894.553l2.991 5.982a.869.869 0 01.02.037l.99 1.98a1 1 0 11-1.79.895L15.383 16h-4.764l-.724 1.447a1 1 0 11-1.788-.894l.99-1.98.019-.038 2.99-5.982A1 1 0 0113 8zm-1.382 6h2.764L13 11.236 11.618 14z"
             clip-rule="evenodd"
           />
         </svg>
-        <label class="text-sm font-semibold text-gray-700">Number of Languages</label>
+        <label class="text-xs font-medium text-gray-700 whitespace-nowrap"
+          >Number of Languages</label
+        >
         <button
           type="button"
           (click)="openLanguagesHelp()"
-          class="text-blue-600 hover:text-blue-700 transition-colors ml-1"
+          class="text-blue-500 hover:text-blue-600 transition-colors"
           data-testid="languages-help-button"
           aria-label="Help about languages"
         >
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
             <path
               fill-rule="evenodd"
               d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"
@@ -86,11 +90,12 @@
           </svg>
         </button>
       </div>
-      <div class="flex items-center gap-3">
+
+      <div class="flex items-center gap-2">
         <button
           type="button"
           (click)="decrementLanguages()"
-          class="w-10 h-10 flex items-center justify-center bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 active:bg-gray-300 transition-colors font-bold text-xl border border-gray-300"
+          class="w-7 h-7 flex items-center justify-center bg-white text-gray-600 rounded border border-gray-300 hover:bg-gray-50 active:bg-gray-100 transition-colors text-base font-medium"
           data-testid="languages-decrement"
         >
           −
@@ -98,26 +103,27 @@
         <input
           type="number"
           [field]="webConfigFields().languages"
-          class="flex-1 px-4 py-3 text-center text-lg font-semibold border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          class="w-16 h-7 px-3 text-center text-sm font-medium border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-400"
           data-testid="languages-input"
         />
         <button
           type="button"
           (click)="incrementLanguages()"
-          class="w-10 h-10 flex items-center justify-center bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 active:bg-gray-300 transition-colors font-bold text-xl border border-gray-300"
+          class="w-7 h-7 flex items-center justify-center bg-white text-gray-600 rounded border border-gray-300 hover:bg-gray-50 active:bg-gray-100 transition-colors text-base font-medium"
           data-testid="languages-increment"
         >
           +
         </button>
       </div>
-      @if (webConfigFields().languages().touched() && webConfigFields().languages().invalid()) {
-      <div class="text-sm text-red-600 mt-1">
-        @for (error of webConfigFields().languages().errors(); track error) {
-        <p>{{ error.message }}</p>
-        }
-      </div>
+    </div>
+
+    @if (webConfigFields().languages().touched() && webConfigFields().languages().invalid()) {
+    <div class="text-xs text-red-600 w-full text-right pr-4">
+      @for (error of webConfigFields().languages().errors(); track error) {
+      <p>{{ error.message }}</p>
       }
     </div>
+    }
   </div>
 
   <app-help-modal

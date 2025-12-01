@@ -64,13 +64,18 @@ describe('HelpModal', () => {
 
     const compiled = fixture.nativeElement;
     const dialog = compiled.querySelector('dialog');
-
     const rect = dialog.getBoundingClientRect();
+
     const clickEvent = new MouseEvent('click', {
       bubbles: true,
       cancelable: true,
-      clientX: rect.left - 10,
-      clientY: rect.top - 10,
+      clientX: rect.right + 10,
+      clientY: rect.top,
+    });
+
+    Object.defineProperty(clickEvent, 'currentTarget', {
+      writable: false,
+      value: dialog,
     });
 
     dialog.dispatchEvent(clickEvent);
@@ -92,6 +97,11 @@ describe('HelpModal', () => {
       cancelable: true,
       clientX: rect.left + rect.width / 2,
       clientY: rect.top + rect.height / 2,
+    });
+
+    Object.defineProperty(clickEvent, 'currentTarget', {
+      writable: false,
+      value: dialog,
     });
 
     dialog.dispatchEvent(clickEvent);

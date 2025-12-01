@@ -40,12 +40,5 @@ export class ProductsForm {
     );
   });
 
-  submissionStatus = signal<'idle' | 'submitted'>('idle');
-
   constructor(private budgetService: Budget) {}
-
-  onSubmit(event: Event): void {
-    event.preventDefault();
-    this.submissionStatus.set('submitted');
-  }
 }
