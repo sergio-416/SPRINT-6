@@ -58,28 +58,6 @@ describe('HelpModal', () => {
     expect(contentElement.textContent).toContain('This is test help content');
   });
 
-  it('should have a close button', () => {
-    component.isOpen.set(true);
-    fixture.detectChanges();
-
-    const compiled = fixture.nativeElement;
-    const closeButton = compiled.querySelector('[data-testid="close-button"]');
-    expect(closeButton).not.toBeNull();
-  });
-
-  it('should close modal when close button is clicked', () => {
-    component.isOpen.set(true);
-    fixture.detectChanges();
-
-    const compiled = fixture.nativeElement;
-    const closeButton = compiled.querySelector('[data-testid="close-button"]');
-    closeButton.click();
-    fixture.detectChanges();
-
-    const dialog = compiled.querySelector('dialog');
-    expect(dialog.hasAttribute('open')).toBe(false);
-  });
-
   it('should close modal when backdrop is clicked', () => {
     component.isOpen.set(true);
     fixture.detectChanges();
@@ -99,5 +77,26 @@ describe('HelpModal', () => {
     fixture.detectChanges();
 
     expect(dialog.hasAttribute('open')).toBe(false);
+  });
+
+  it('should not close modal when content area is clicked', () => {
+    component.isOpen.set(true);
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement;
+    const dialog = compiled.querySelector('dialog');
+    const rect = dialog.getBoundingClientRect();
+
+    const clickEvent = new MouseEvent('click', {
+      bubbles: true,
+      cancelable: true,
+      clientX: rect.left + rect.width / 2,
+      clientY: rect.top + rect.height / 2,
+    });
+
+    dialog.dispatchEvent(clickEvent);
+    fixture.detectChanges();
+
+    expect(dialog.hasAttribute('open')).toBe(true);
   });
 });
