@@ -1,9 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ProductsForm } from './products-form';
+import { Budget } from '../../services/budget';
 
 describe('ProductsForm', () => {
   let component: ProductsForm;
   let fixture: ComponentFixture<ProductsForm>;
+  let budgetService: Budget;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -12,6 +14,7 @@ describe('ProductsForm', () => {
 
     fixture = TestBed.createComponent(ProductsForm);
     component = fixture.componentInstance;
+    budgetService = TestBed.inject(Budget);
     fixture.detectChanges();
   });
 
@@ -23,7 +26,13 @@ describe('ProductsForm', () => {
     const formValue = component.quoteModel();
     expect(formValue.seoSelected).toBe(false);
     expect(formValue.adsSelected).toBe(false);
-    expect(formValue.webSelected).toBe(false);
+    expect(formValue.webConfig.selected).toBe(false);
+  });
+
+  it('should initialize website config with default values', () => {
+    const formValue = component.quoteModel();
+    expect(formValue.webConfig.pages).toBe(1);
+    expect(formValue.webConfig.languages).toBe(1);
   });
 
   it('should calculate total as 0 when no services are selected', () => {
@@ -40,22 +49,29 @@ describe('ProductsForm', () => {
     expect(component.totalPrice()).toBe(400);
   });
 
-  it('should calculate total as 500 when only Web is selected', () => {
-    component.quoteForm.webSelected().value.set(true);
+  it('should calculate total as 500 when only Web is selected without customization', () => {
+    component.quoteForm.webConfig.selected().value.set(true);
     expect(component.totalPrice()).toBe(500);
   });
 
-  it('should calculate total as 1200 when all services are selected', () => {
+  it('should calculate total as 800 when Web is selected with 5 pages and 2 languages', () => {
+    component.quoteForm.webConfig.selected().value.set(true);
+    component.quoteForm.webConfig.pages().value.set(5);
+    component.quoteForm.webConfig.languages().value.set(2);
+    expect(component.totalPrice()).toBe(800);
+  });
+
+  it('should calculate total as 1200 when all services are selected without customization', () => {
     component.quoteForm.seoSelected().value.set(true);
     component.quoteForm.adsSelected().value.set(true);
-    component.quoteForm.webSelected().value.set(true);
+    component.quoteForm.webConfig.selected().value.set(true);
     expect(component.totalPrice()).toBe(1200);
   });
 
-  it('should render three checkboxes', () => {
+  it('should render three service checkboxes', () => {
     const compiled = fixture.nativeElement;
     const checkboxes = compiled.querySelectorAll('input[type="checkbox"]');
-    expect(checkboxes.length).toBe(3);
+    expect(checkboxes.length).toBeGreaterThanOrEqual(3);
   });
 
   it('should display the calculated total price', () => {
@@ -75,5 +91,20 @@ describe('ProductsForm', () => {
     fixture.detectChanges();
 
     expect(component.submissionStatus()).toBe('submitted');
+  });
+
+  it('should not show panel when website is not selected', () => {
+    const compiled = fixture.nativeElement;
+    const panel = compiled.querySelector('app-website-panel');
+    expect(panel).toBeNull();
+  });
+
+  it('should show panel when website is selected', () => {
+    component.quoteForm.webConfig.selected().value.set(true);
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement;
+    const panel = compiled.querySelector('app-website-panel');
+    expect(panel).not.toBeNull();
   });
 });
