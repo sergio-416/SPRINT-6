@@ -3,7 +3,24 @@
 
   <div class="flex flex-col gap-4">
     <div class="flex flex-col gap-2">
-      <label class="text-sm font-medium text-gray-700">Number of Pages</label>
+      <div class="flex items-center gap-2">
+        <label class="text-sm font-medium text-gray-700">Number of Pages</label>
+        <button
+          type="button"
+          (click)="openPagesHelp()"
+          class="text-blue-600 hover:text-blue-700 transition-colors"
+          data-testid="pages-help-button"
+          aria-label="Help about pages"
+        >
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+      </div>
       <div class="flex items-center gap-3">
         <button
           type="button"
@@ -38,7 +55,24 @@
     </div>
 
     <div class="flex flex-col gap-2">
-      <label class="text-sm font-medium text-gray-700">Number of Languages</label>
+      <div class="flex items-center gap-2">
+        <label class="text-sm font-medium text-gray-700">Number of Languages</label>
+        <button
+          type="button"
+          (click)="openLanguagesHelp()"
+          class="text-blue-600 hover:text-blue-700 transition-colors"
+          data-testid="languages-help-button"
+          aria-label="Help about languages"
+        >
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+      </div>
       <div class="flex items-center gap-3">
         <button
           type="button"
@@ -72,4 +106,16 @@
       }
     </div>
   </div>
+
+  <app-help-modal
+    #pagesModal
+    title="Number of Pages"
+    content="Specify how many pages your website will have. Each page represents a distinct section or view in your website. More pages allow for more content organization but increase development time and cost. The base customization cost is calculated as: pages × languages × €30."
+  />
+
+  <app-help-modal
+    #languagesModal
+    title="Number of Languages"
+    content="Add the languages your project will support. Each additional language requires translating all content and adapting the interface, which increases the project scope. Supporting multiple languages makes your website accessible to a broader audience. The customization cost per language is: pages × languages × €30."
+  />
 </div>

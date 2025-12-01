@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, viewChild } from '@angular/core';
 import { Field, FieldTree } from '@angular/forms/signals';
+import { HelpModal } from '../help-modal/help-modal';
 
 @Component({
   selector: 'app-website-panel',
-  imports: [Field],
+  imports: [Field, HelpModal],
   templateUrl: './website-panel.html',
   styleUrl: './website-panel.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -11,6 +12,9 @@ import { Field, FieldTree } from '@angular/forms/signals';
 export class WebsitePanel {
   webConfigFields =
     input.required<FieldTree<{ selected: boolean; pages: number; languages: number }>>();
+
+  pagesModal = viewChild.required<HelpModal>('pagesModal');
+  languagesModal = viewChild.required<HelpModal>('languagesModal');
 
   incrementPages(): void {
     const currentValue = this.webConfigFields().pages().value();
@@ -42,5 +46,13 @@ export class WebsitePanel {
         .languages()
         .value.set(currentValue - 1);
     }
+  }
+
+  openPagesHelp(): void {
+    this.pagesModal().isOpen.set(true);
+  }
+
+  openLanguagesHelp(): void {
+    this.languagesModal().isOpen.set(true);
   }
 }
