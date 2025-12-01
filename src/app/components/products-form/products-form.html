@@ -1,59 +1,97 @@
-<form
-  (submit)="onSubmit($event)"
-  class="flex flex-col gap-6 max-w-2xl mx-auto my-8 p-8 border border-gray-300 rounded-lg bg-gray-50"
->
-  <div class="flex flex-col">
-    <label
-      class="flex items-center gap-3 p-4 cursor-pointer rounded hover:bg-blue-50 transition-colors"
-    >
-      <input type="checkbox" [field]="quoteForm.seoSelected" class="w-5 h-5 cursor-pointer" />
-      <span class="text-base text-gray-800">Start an SEO campaign (€300)</span>
-    </label>
-  </div>
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <app-page-header />
 
-  <div class="flex flex-col">
-    <label
-      class="flex items-center gap-3 p-4 cursor-pointer rounded hover:bg-blue-50 transition-colors"
-    >
-      <input type="checkbox" [field]="quoteForm.adsSelected" class="w-5 h-5 cursor-pointer" />
-      <span class="text-base text-gray-800">Create an advertising campaign (€400)</span>
-    </label>
-  </div>
+  <form (submit)="onSubmit($event)" class="flex flex-col gap-6">
+    <!-- SEO Service Card -->
+    <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6 transition-all hover:shadow-lg">
+      <div class="flex items-start justify-between">
+        <div class="flex-1">
+          <h2 class="text-2xl font-bold text-gray-900 mb-2">SEO</h2>
+          <p class="text-sm text-gray-600 mb-4">Complete responsive web programming</p>
+        </div>
+        <div class="flex items-center gap-4">
+          <span class="text-3xl font-bold text-gray-900">€300</span>
+          <label class="flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              [field]="quoteForm.seoSelected"
+              class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer"
+            />
+            <span class="ml-2 text-sm font-medium text-gray-700">Select</span>
+          </label>
+        </div>
+      </div>
+    </div>
 
-  <div class="flex flex-col">
-    <label
-      class="flex items-center gap-3 p-4 cursor-pointer rounded hover:bg-blue-50 transition-colors"
-    >
-      <input
-        type="checkbox"
-        [field]="quoteForm.webConfig.selected"
-        class="w-5 h-5 cursor-pointer"
-      />
-      <span class="text-base text-gray-800">Create a website (€500 base)</span>
-    </label>
+    <!-- Ads Service Card -->
+    <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6 transition-all hover:shadow-lg">
+      <div class="flex items-start justify-between">
+        <div class="flex-1">
+          <h2 class="text-2xl font-bold text-gray-900 mb-2">Ads</h2>
+          <p class="text-sm text-gray-600 mb-4">Complete responsive web programming</p>
+        </div>
+        <div class="flex items-center gap-4">
+          <span class="text-3xl font-bold text-gray-900">€400</span>
+          <label class="flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              [field]="quoteForm.adsSelected"
+              class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer"
+            />
+            <span class="ml-2 text-sm font-medium text-gray-700">Select</span>
+          </label>
+        </div>
+      </div>
+    </div>
 
-    @if (quoteForm.webConfig.selected().value()) {
-    <app-website-panel [webConfigFields]="quoteForm.webConfig" />
+    <!-- Web Service Card with Integrated Panel -->
+    <div
+      class="bg-white rounded-lg shadow-md border-2 p-6 transition-all hover:shadow-lg"
+      [class.border-green-500]="quoteForm.webConfig.selected().value()"
+      [class.border-gray-200]="!quoteForm.webConfig.selected().value()"
+    >
+      <div class="flex items-start justify-between mb-6">
+        <div class="flex-1">
+          <h2 class="text-2xl font-bold text-gray-900 mb-2">Web</h2>
+          <p class="text-sm text-gray-600 mb-4">Complete responsive web programming</p>
+        </div>
+        <div class="flex items-center gap-4">
+          <span class="text-3xl font-bold text-gray-900">€500</span>
+          <label class="flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              [field]="quoteForm.webConfig.selected"
+              class="w-5 h-5 text-green-600 border-gray-300 rounded focus:ring-2 focus:ring-green-500 cursor-pointer"
+            />
+            <span class="ml-2 text-sm font-medium text-gray-700">Select</span>
+          </label>
+        </div>
+      </div>
+
+      @if (quoteForm.webConfig.selected().value()) {
+        <app-website-panel [webConfigFields]="quoteForm.webConfig" />
+      }
+    </div>
+
+    <!-- Total Price Section -->
+    <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+      <div class="flex items-center justify-between">
+        <span class="text-xl font-semibold text-gray-900">Estimated Budget:</span>
+        <span class="text-4xl font-bold text-gray-900" data-testid="total-price">€{{ totalPrice() }}</span>
+      </div>
+    </div>
+
+    @if (submissionStatus() === 'submitted') {
+      <div class="p-4 bg-green-50 border border-green-300 rounded-lg text-green-800 text-center" role="alert">
+        Quote generated successfully! Total: €{{ totalPrice() }}
+      </div>
     }
-  </div>
 
-  <div
-    class="p-6 bg-blue-50 rounded text-center text-xl font-semibold text-blue-700"
-    data-testid="total-price"
-  >
-    Total Price: €{{ totalPrice() }}
-  </div>
-
-  @if (submissionStatus() === 'submitted') {
-  <div class="p-4 bg-green-100 border border-green-400 rounded text-green-800" role="alert">
-    Quote generated successfully! Total: €{{ totalPrice() }}
-  </div>
-  }
-
-  <button
-    type="submit"
-    class="px-8 py-4 bg-blue-600 text-white rounded font-semibold hover:bg-blue-700 active:bg-blue-800 transition-colors cursor-pointer"
-  >
-    Generate Quote
-  </button>
-</form>
+    <button
+      type="submit"
+      class="w-full py-4 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-colors shadow-md hover:shadow-lg"
+    >
+      Generate Quote
+    </button>
+  </form>
+</div>
