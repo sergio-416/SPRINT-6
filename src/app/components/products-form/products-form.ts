@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { Field, form, min, required, email as emailValidator } from '@angular/forms/signals';
 import { QuoteFormModel } from '../../models/quote-form';
-import { SortOption } from '../../models/sort-option';
+import { SortOption, SortDirection } from '../../models/sort-option';
 import { Budget } from '../../services/budget';
 import { WebsitePanel } from '../website-panel/website-panel';
 import { PageHeader } from '../page-header/page-header';
@@ -17,6 +17,7 @@ import { BudgetsList } from '../budgets-list/budgets-list';
 export class ProductsForm {
   searchQuery = signal('');
   sortBy = signal<SortOption>('date');
+  sortDirection = signal<SortDirection>('desc');
 
   quoteModel = signal<QuoteFormModel>({
     clientName: '',
@@ -61,17 +62,23 @@ export class ProductsForm {
     }
 
     const sortOption = this.sortBy();
+    const direction = this.sortDirection();
+    const multiplier = direction === 'desc' ? -1 : 1;
+
     quotes.sort((a, b) => {
+      let comparison = 0;
       switch (sortOption) {
         case 'date':
-          return b.createdAt.getTime() - a.createdAt.getTime();
+          comparison = b.createdAt.getTime() - a.createdAt.getTime();
+          break;
         case 'price':
-          return b.totalPrice - a.totalPrice;
+          comparison = b.totalPrice - a.totalPrice;
+          break;
         case 'name':
-          return a.clientName.localeCompare(b.clientName);
-        default:
-          return 0;
+          comparison = a.clientName.localeCompare(b.clientName);
+          break;
       }
+      return comparison * multiplier;
     });
 
     return quotes;
@@ -109,7 +116,12 @@ export class ProductsForm {
   }
 
   onSortChange(sort: SortOption): void {
-    this.sortBy.set(sort);
+    if (this.sortBy() === sort) {
+      this.sortDirection.update((dir) => (dir === 'desc' ? 'asc' : 'desc'));
+    } else {
+      this.sortBy.set(sort);
+      this.sortDirection.set('desc');
+    }
   }
 
   private resetForm(): void {
