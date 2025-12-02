@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { Field, form, min, required, email as emailValidator } from '@angular/forms/signals';
 import { QuoteFormModel } from '../../models/quote-form';
+import { SortOption, SortDirection } from '../../models/sort-option';
 import { Budget } from '../../services/budget';
 import { WebsitePanel } from '../website-panel/website-panel';
 import { PageHeader } from '../page-header/page-header';
@@ -14,6 +15,11 @@ import { BudgetsList } from '../budgets-list/budgets-list';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsForm {
+  searchQuery = signal('');
+  sortBy = signal<SortOption>('date');
+  sortDirection = signal<SortDirection>('desc');
+  formJustReset = signal(false);
+
   quoteModel = signal<QuoteFormModel>({
     clientName: '',
     phone: '',
@@ -48,6 +54,37 @@ export class ProductsForm {
     );
   });
 
+  filteredAndSortedQuotes = computed(() => {
+    let quotes = [...this.budgetService.quotes()];
+
+    const query = this.searchQuery().toLowerCase().trim();
+    if (query) {
+      quotes = quotes.filter((quote) => quote.clientName.toLowerCase().includes(query));
+    }
+
+    const sortOption = this.sortBy();
+    const direction = this.sortDirection();
+    const multiplier = direction === 'desc' ? -1 : 1;
+
+    quotes.sort((a, b) => {
+      let comparison = 0;
+      switch (sortOption) {
+        case 'date':
+          comparison = a.createdAt.getTime() - b.createdAt.getTime();
+          break;
+        case 'price':
+          comparison = a.totalPrice - b.totalPrice;
+          break;
+        case 'name':
+          comparison = a.clientName.localeCompare(b.clientName);
+          break;
+      }
+      return comparison * multiplier;
+    });
+
+    return quotes;
+  });
+
   constructor(public budgetService: Budget) {}
 
   onSubmit(event: Event): void {
@@ -74,7 +111,30 @@ export class ProductsForm {
     this.resetForm();
   }
 
+  onSearchChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.searchQuery.set(input.value);
+  }
+
+  onSortChange(sort: SortOption): void {
+    if (this.sortBy() === sort) {
+      this.sortDirection.update((dir) => (dir === 'desc' ? 'asc' : 'desc'));
+    } else {
+      this.sortBy.set(sort);
+      const defaultDirection = sort === 'name' ? 'asc' : 'desc';
+      this.sortDirection.set(defaultDirection);
+    }
+  }
+
+  onFieldInteraction(): void {
+    if (this.formJustReset()) {
+      this.formJustReset.set(false);
+    }
+  }
+
   private resetForm(): void {
+    this.formJustReset.set(true);
+
     this.quoteModel.set({
       clientName: '',
       phone: '',
