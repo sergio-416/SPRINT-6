@@ -123,4 +123,57 @@ describe('ProductsForm', () => {
     const panel = compiled.querySelector('app-website-panel');
     expect(panel).not.toBeNull();
   });
+  it('should render client name input', () => {
+    const compiled = fixture.nativeElement;
+    const nameInput = compiled.querySelector('[data-testid="client-name"]');
+    expect(nameInput).not.toBeNull();
+  });
+
+  it('should render phone input', () => {
+    const compiled = fixture.nativeElement;
+    const phoneInput = compiled.querySelector('[data-testid="client-phone"]');
+    expect(phoneInput).not.toBeNull();
+  });
+
+  it('should render email input', () => {
+    const compiled = fixture.nativeElement;
+    const emailInput = compiled.querySelector('[data-testid="client-email"]');
+    expect(emailInput).not.toBeNull();
+  });
+
+  it('should create quote when form is submitted with valid data', () => {
+    component.quoteModel.update((current) => ({
+      ...current,
+      clientName: 'John Doe',
+      phone: '123-456-7890',
+      email: 'john@example.com',
+      seoSelected: true,
+    }));
+
+    const budgetService = TestBed.inject(Budget);
+    const initialCount = budgetService.quotes().length;
+
+    component.onSubmit(new Event('submit'));
+
+    expect(budgetService.quotes().length).toBe(initialCount + 1);
+    expect(budgetService.quotes()[initialCount].clientName).toBe('John Doe');
+  });
+
+  it('should clear form after successful submission', () => {
+    component.quoteModel.update((current) => ({
+      ...current,
+      clientName: 'John Doe',
+      phone: '123-456-7890',
+      email: 'john@example.com',
+      seoSelected: true,
+    }));
+
+    component.onSubmit(new Event('submit'));
+
+    const formValue = component.quoteForm().value();
+    expect(formValue.clientName).toBe('');
+    expect(formValue.phone).toBe('');
+    expect(formValue.email).toBe('');
+    expect(formValue.seoSelected).toBe(false);
+  });
 });
