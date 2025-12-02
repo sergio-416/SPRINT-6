@@ -281,6 +281,7 @@ describe('Quote filtering and sorting', () => {
 
   it('should sort quotes by date (newest first by default)', () => {
     component.sortBy.set('date');
+    component.sortDirection.set('desc');
     const sorted = component.filteredAndSortedQuotes();
     expect(sorted[0].clientName).toBe('Charlie Brown');
     expect(sorted[2].clientName).toBe('Alice Johnson');
@@ -288,6 +289,7 @@ describe('Quote filtering and sorting', () => {
 
   it('should sort quotes by price (highest first)', () => {
     component.sortBy.set('price');
+    component.sortDirection.set('desc');
     const sorted = component.filteredAndSortedQuotes();
     expect(sorted[0].totalPrice).toBe(700);
     expect(sorted[1].totalPrice).toBe(400);
@@ -296,6 +298,7 @@ describe('Quote filtering and sorting', () => {
 
   it('should sort quotes alphabetically by name', () => {
     component.sortBy.set('name');
+    component.sortDirection.set('asc');
     const sorted = component.filteredAndSortedQuotes();
     expect(sorted[0].clientName).toBe('Alice Johnson');
     expect(sorted[1].clientName).toBe('Bob Smith');

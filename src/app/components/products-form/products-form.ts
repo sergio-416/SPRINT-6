@@ -18,6 +18,7 @@ export class ProductsForm {
   searchQuery = signal('');
   sortBy = signal<SortOption>('date');
   sortDirection = signal<SortDirection>('desc');
+  formJustReset = signal(false);
 
   quoteModel = signal<QuoteFormModel>({
     clientName: '',
@@ -69,10 +70,10 @@ export class ProductsForm {
       let comparison = 0;
       switch (sortOption) {
         case 'date':
-          comparison = b.createdAt.getTime() - a.createdAt.getTime();
+          comparison = a.createdAt.getTime() - b.createdAt.getTime();
           break;
         case 'price':
-          comparison = b.totalPrice - a.totalPrice;
+          comparison = a.totalPrice - b.totalPrice;
           break;
         case 'name':
           comparison = a.clientName.localeCompare(b.clientName);
@@ -120,11 +121,20 @@ export class ProductsForm {
       this.sortDirection.update((dir) => (dir === 'desc' ? 'asc' : 'desc'));
     } else {
       this.sortBy.set(sort);
-      this.sortDirection.set('desc');
+      const defaultDirection = sort === 'name' ? 'asc' : 'desc';
+      this.sortDirection.set(defaultDirection);
+    }
+  }
+
+  onFieldInteraction(): void {
+    if (this.formJustReset()) {
+      this.formJustReset.set(false);
     }
   }
 
   private resetForm(): void {
+    this.formJustReset.set(true);
+
     this.quoteModel.set({
       clientName: '',
       phone: '',

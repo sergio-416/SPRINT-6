@@ -11,10 +11,12 @@
           <input
             type="text"
             [field]="quoteForm.clientName"
+            (input)="onFieldInteraction()"
             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             data-testid="client-name"
           />
-          @if (quoteForm.clientName().touched() && quoteForm.clientName().invalid()) {
+          @if (quoteForm.clientName().touched() && quoteForm.clientName().invalid() &&
+          !formJustReset()) {
           <div class="text-sm text-red-600 mt-1">
             @for (error of quoteForm.clientName().errors(); track error) {
             <p>{{ error.message }}</p>
@@ -29,10 +31,11 @@
             <input
               type="tel"
               [field]="quoteForm.phone"
+              (input)="onFieldInteraction()"
               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               data-testid="client-phone"
             />
-            @if (quoteForm.phone().touched() && quoteForm.phone().invalid()) {
+            @if (quoteForm.phone().touched() && quoteForm.phone().invalid() && !formJustReset()) {
             <div class="text-sm text-red-600 mt-1">
               @for (error of quoteForm.phone().errors(); track error) {
               <p>{{ error.message }}</p>
@@ -46,10 +49,11 @@
             <input
               type="email"
               [field]="quoteForm.email"
+              (input)="onFieldInteraction()"
               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               data-testid="client-email"
             />
-            @if (quoteForm.email().touched() && quoteForm.email().invalid()) {
+            @if (quoteForm.email().touched() && quoteForm.email().invalid() && !formJustReset()) {
             <div class="text-sm text-red-600 mt-1">
               @for (error of quoteForm.email().errors(); track error) {
               <p>{{ error.message }}</p>
