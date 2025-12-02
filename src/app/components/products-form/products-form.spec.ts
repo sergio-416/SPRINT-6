@@ -194,8 +194,9 @@ describe('Quote filtering and sorting', () => {
     fixture.detectChanges();
 
     const budgetService = TestBed.inject(Budget);
+    const baseTime = new Date('2025-01-01T10:00:00Z');
 
-    budgetService.createQuote({
+    const alice = budgetService.createQuote({
       clientName: 'Alice Johnson',
       phone: '111-1111',
       email: 'alice@test.com',
@@ -207,7 +208,15 @@ describe('Quote filtering and sorting', () => {
       totalPrice: 300,
     });
 
-    budgetService.createQuote({
+    const aliceQuote = budgetService.quotes().find((q) => q.id === alice);
+    if (aliceQuote) {
+      Object.defineProperty(aliceQuote, 'createdAt', {
+        value: new Date(baseTime.getTime()),
+        writable: true,
+      });
+    }
+
+    const bob = budgetService.createQuote({
       clientName: 'Bob Smith',
       phone: '222-2222',
       email: 'bob@test.com',
@@ -219,7 +228,15 @@ describe('Quote filtering and sorting', () => {
       totalPrice: 400,
     });
 
-    budgetService.createQuote({
+    const bobQuote = budgetService.quotes().find((q) => q.id === bob);
+    if (bobQuote) {
+      Object.defineProperty(bobQuote, 'createdAt', {
+        value: new Date(baseTime.getTime() + 60000),
+        writable: true,
+      });
+    }
+
+    const charlie = budgetService.createQuote({
       clientName: 'Charlie Brown',
       phone: '333-3333',
       email: 'charlie@test.com',
@@ -230,6 +247,14 @@ describe('Quote filtering and sorting', () => {
       languages: 1,
       totalPrice: 700,
     });
+
+    const charlieQuote = budgetService.quotes().find((q) => q.id === charlie);
+    if (charlieQuote) {
+      Object.defineProperty(charlieQuote, 'createdAt', {
+        value: new Date(baseTime.getTime() + 120000),
+        writable: true,
+      });
+    }
 
     fixture.detectChanges();
   });
