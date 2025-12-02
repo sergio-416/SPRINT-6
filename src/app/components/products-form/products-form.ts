@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { Field, form, min, required, email as emailValidator } from '@angular/forms/signals';
 import { QuoteFormModel } from '../../models/quote-form';
+import { SortOption } from '../../models/sort-option';
 import { Budget } from '../../services/budget';
 import { WebsitePanel } from '../website-panel/website-panel';
 import { PageHeader } from '../page-header/page-header';
@@ -14,6 +15,9 @@ import { BudgetsList } from '../budgets-list/budgets-list';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsForm {
+  searchQuery = signal('');
+  sortBy = signal<SortOption>('date');
+
   quoteModel = signal<QuoteFormModel>({
     clientName: '',
     phone: '',
@@ -48,6 +52,31 @@ export class ProductsForm {
     );
   });
 
+  filteredAndSortedQuotes = computed(() => {
+    let quotes = [...this.budgetService.quotes()];
+
+    const query = this.searchQuery().toLowerCase().trim();
+    if (query) {
+      quotes = quotes.filter((quote) => quote.clientName.toLowerCase().includes(query));
+    }
+
+    const sortOption = this.sortBy();
+    quotes.sort((a, b) => {
+      switch (sortOption) {
+        case 'date':
+          return b.createdAt.getTime() - a.createdAt.getTime();
+        case 'price':
+          return b.totalPrice - a.totalPrice;
+        case 'name':
+          return a.clientName.localeCompare(b.clientName);
+        default:
+          return 0;
+      }
+    });
+
+    return quotes;
+  });
+
   constructor(public budgetService: Budget) {}
 
   onSubmit(event: Event): void {
@@ -72,6 +101,15 @@ export class ProductsForm {
     });
 
     this.resetForm();
+  }
+
+  onSearchChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.searchQuery.set(input.value);
+  }
+
+  onSortChange(sort: SortOption): void {
+    this.sortBy.set(sort);
   }
 
   private resetForm(): void {
