@@ -80,7 +80,11 @@
       </div>
     </div>
 
-    <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+    <div
+      class="bg-white rounded-lg shadow-md border-2 p-6"
+      [class.border-blue-600]="quoteForm.seoSelected().value()"
+      [class.border-gray-200]="!quoteForm.seoSelected().value()"
+    >
       <div class="flex items-start justify-between">
         <div class="flex-1">
           <h2 class="text-2xl font-bold text-gray-900 mb-2">SEO</h2>
@@ -103,7 +107,11 @@
       </div>
     </div>
 
-    <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+    <div
+      class="bg-white rounded-lg shadow-md border-2 p-6"
+      [class.border-blue-600]="quoteForm.adsSelected().value()"
+      [class.border-gray-200]="!quoteForm.adsSelected().value()"
+    >
       <div class="flex items-start justify-between">
         <div class="flex-1">
           <h2 class="text-2xl font-bold text-gray-900 mb-2">Ads</h2>
@@ -126,7 +134,7 @@
 
     <div
       class="bg-white rounded-lg shadow-md border-2 p-6"
-      [class.border-green-500]="quoteForm.webConfig.selected().value()"
+      [class.border-blue-600]="quoteForm.webConfig.selected().value()"
       [class.border-gray-200]="!quoteForm.webConfig.selected().value()"
     >
       <div class="flex items-start justify-between mb-4">
@@ -141,7 +149,7 @@
               type="checkbox"
               [field]="quoteForm.webConfig.selected"
               [attr.aria-label]="'Select Web service for €' + budgetService.WEB_BASE_PRICE"
-              class="w-5 h-5 text-green-600 border-gray-300 rounded focus:ring-2 focus:ring-green-500 cursor-pointer"
+              class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500 cursor-pointer"
             />
             <span class="ml-2 text-sm font-medium text-gray-700">Select</span>
           </label>
