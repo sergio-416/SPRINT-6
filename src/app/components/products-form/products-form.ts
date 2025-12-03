@@ -1,5 +1,16 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  Signal,
+  signal,
+  untracked,
+} from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Field, form, min, required, email as emailValidator } from '@angular/forms/signals';
+import { ActivatedRoute, Router, Params } from '@angular/router';
 import { QuoteFormModel } from '../../models/quote-form';
 import { SortOption, SortDirection } from '../../models/sort-option';
 import { Budget } from '../../services/budget';
@@ -15,10 +26,15 @@ import { BudgetsList } from '../budgets-list/budgets-list';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsForm {
+  budgetService = inject(Budget);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+
   searchQuery = signal('');
   sortBy = signal<SortOption>('date');
   sortDirection = signal<SortDirection>('desc');
   formJustReset = signal(false);
+  private isInitializing = signal(true);
 
   quoteModel = signal<QuoteFormModel>({
     clientName: '',
@@ -85,7 +101,64 @@ export class ProductsForm {
     return quotes;
   });
 
-  constructor(public budgetService: Budget) {}
+  private readonly queryParams: Signal<Params>;
+
+  constructor() {
+    this.queryParams = toSignal(this.route.queryParams, { initialValue: {} });
+
+    effect(() => {
+      const params = this.queryParams();
+
+      const model: QuoteFormModel = {
+        clientName: (params['clientName'] as string) || '',
+        phone: (params['phone'] as string) || '',
+        email: (params['email'] as string) || '',
+        seoSelected: params['seo'] === 'true',
+        adsSelected: params['ads'] === 'true',
+        webConfig: {
+          selected: params['web'] === 'true',
+          pages: params['pages'] ? parseInt(params['pages'] as string, 10) : 1,
+          languages: params['languages'] ? parseInt(params['languages'] as string, 10) : 1,
+        },
+      };
+
+      untracked(() => {
+        this.quoteModel.set(model);
+      });
+
+      if (untracked(() => this.isInitializing())) {
+        this.isInitializing.set(false);
+      }
+    });
+
+    effect(() => {
+      if (this.isInitializing()) {
+        return;
+      }
+
+      const model = this.quoteModel();
+
+      const queryParams = {
+        clientName: model.clientName || '',
+        phone: model.phone || '',
+        email: model.email || '',
+        seo: model.seoSelected.toString(),
+        ads: model.adsSelected.toString(),
+        web: model.webConfig.selected.toString(),
+        pages: model.webConfig.pages.toString(),
+        languages: model.webConfig.languages.toString(),
+      };
+
+      untracked(() => {
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams,
+          queryParamsHandling: 'merge',
+          replaceUrl: true,
+        });
+      });
+    });
+  }
 
   onSubmit(event: Event): void {
     event.preventDefault();

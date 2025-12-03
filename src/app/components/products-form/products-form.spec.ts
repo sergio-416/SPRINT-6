@@ -1,4 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Router, provideRouter } from '@angular/router';
+import { Location } from '@angular/common';
+import { provideLocationMocks } from '@angular/common/testing';
 import { ProductsForm } from './products-form';
 import { Budget } from '../../services/budget';
 
@@ -9,7 +12,7 @@ describe('ProductsForm', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ProductsForm],
-      providers: [Budget],
+      providers: [Budget, provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ProductsForm);
@@ -186,7 +189,7 @@ describe('Quote filtering and sorting', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ProductsForm],
-      providers: [Budget],
+      providers: [Budget, provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ProductsForm);
@@ -328,5 +331,134 @@ describe('Quote filtering and sorting', () => {
     expect(dateButton).not.toBeNull();
     expect(priceButton).not.toBeNull();
     expect(nameButton).not.toBeNull();
+  });
+});
+
+describe('URL state synchronization', () => {
+  let component: ProductsForm;
+  let fixture: ComponentFixture<ProductsForm>;
+  let router: Router;
+  let location: Location;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ProductsForm],
+      providers: [
+        Budget,
+        provideRouter([{ path: '', component: ProductsForm }]),
+        provideLocationMocks(),
+      ],
+    }).compileComponents();
+
+    router = TestBed.inject(Router);
+    location = TestBed.inject(Location);
+
+    fixture = TestBed.createComponent(ProductsForm);
+    component = fixture.componentInstance;
+
+    await fixture.ngZone?.run(() => router.navigate(['/']));
+    fixture.detectChanges();
+  });
+
+  it('should initialize form from URL query parameters', async () => {
+    await fixture.ngZone?.run(async () => {
+      await router.navigate(['/'], {
+        queryParams: {
+          clientName: 'John Doe',
+          phone: '555-1234',
+          email: 'john@example.com',
+          seo: 'true',
+          ads: 'true',
+          web: 'true',
+          pages: '5',
+          languages: '2',
+        },
+      });
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    fixture.detectChanges();
+
+    const formValue = component.quoteForm().value();
+    expect(formValue.clientName).toBe('John Doe');
+    expect(formValue.phone).toBe('555-1234');
+    expect(formValue.email).toBe('john@example.com');
+    expect(formValue.seoSelected).toBe(true);
+    expect(formValue.adsSelected).toBe(true);
+    expect(formValue.webConfig.selected).toBe(true);
+    expect(formValue.webConfig.pages).toBe(5);
+    expect(formValue.webConfig.languages).toBe(2);
+  });
+
+  it('should update URL when form values change', async () => {
+    component.quoteModel.update((current) => ({
+      ...current,
+      seoSelected: true,
+      adsSelected: true,
+    }));
+
+    fixture.detectChanges();
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    const params = new URLSearchParams(location.path().split('?')[1] || '');
+    expect(params.get('seo')).toBe('true');
+    expect(params.get('ads')).toBe('true');
+  });
+
+  it('should handle missing query parameters with defaults', async () => {
+    await fixture.ngZone?.run(async () => {
+      await router.navigate(['/'], { queryParams: {} });
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    fixture.detectChanges();
+
+    const formValue = component.quoteForm().value();
+    expect(formValue.seoSelected).toBe(false);
+    expect(formValue.adsSelected).toBe(false);
+    expect(formValue.webConfig.selected).toBe(false);
+    expect(formValue.webConfig.pages).toBe(1);
+    expect(formValue.webConfig.languages).toBe(1);
+  });
+
+  it('should handle partial query parameters', async () => {
+    await fixture.ngZone?.run(async () => {
+      await router.navigate(['/'], {
+        queryParams: {
+          seo: 'true',
+          pages: '10',
+        },
+      });
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    fixture.detectChanges();
+
+    const formValue = component.quoteForm().value();
+    expect(formValue.seoSelected).toBe(true);
+    expect(formValue.adsSelected).toBe(false);
+    expect(formValue.webConfig.pages).toBe(10);
+  });
+
+  it('should not update URL when form is reset after submission', async () => {
+    component.quoteModel.update((current) => ({
+      ...current,
+      clientName: 'Test User',
+      phone: '555-0000',
+      email: 'test@example.com',
+      seoSelected: true,
+    }));
+
+    fixture.detectChanges();
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    component.onSubmit(new Event('submit'));
+
+    fixture.detectChanges();
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    const params = new URLSearchParams(location.path().split('?')[1] || '');
+    expect(params.get('clientName')).toBe('');
+    expect(params.get('seo')).toBe('false');
   });
 });
