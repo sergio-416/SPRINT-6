@@ -5,7 +5,6 @@ import { Quote } from '../../models/quote';
   selector: 'app-budgets-list',
   imports: [],
   templateUrl: './budgets-list.html',
-  styleUrl: './budgets-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BudgetsList {

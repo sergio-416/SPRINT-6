@@ -5,10 +5,10 @@ import { Quote } from '../models/quote';
   providedIn: 'root',
 })
 export class Budget {
-  private readonly SEO_PRICE = 300;
-  private readonly ADS_PRICE = 400;
-  private readonly WEB_BASE_PRICE = 500;
-  private readonly WEBSITE_CUSTOMIZATION_RATE = 30;
+  readonly SEO_PRICE = 300;
+  readonly ADS_PRICE = 400;
+  readonly WEB_BASE_PRICE = 500;
+  readonly WEBSITE_CUSTOMIZATION_RATE = 30;
 
   private quotesSignal = signal<Quote[]>([]);
 

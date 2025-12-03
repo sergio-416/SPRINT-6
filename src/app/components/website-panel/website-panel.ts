@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, viewChild } from '@angular/core';
 import { Field, FieldTree } from '@angular/forms/signals';
 import { HelpModal } from '../help-modal/help-modal';
+import { HELP_CONTENT } from '../../constants/help-content';
 
 @Component({
   selector: 'app-website-panel',
@@ -12,6 +13,8 @@ import { HelpModal } from '../help-modal/help-modal';
 export class WebsitePanel {
   webConfigFields =
     input.required<FieldTree<{ selected: boolean; pages: number; languages: number }>>();
+
+  readonly helpContent = HELP_CONTENT;
 
   pagesModal = viewChild.required<HelpModal>('pagesModal');
   languagesModal = viewChild.required<HelpModal>('languagesModal');

@@ -22,7 +22,6 @@ import { BudgetsList } from '../budgets-list/budgets-list';
   selector: 'app-products-form',
   imports: [Field, WebsitePanel, PageHeader, BudgetsList],
   templateUrl: './products-form.html',
-  styleUrl: './products-form.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductsForm {
