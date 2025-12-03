@@ -1,0 +1,28 @@
+<div class="min-h-screen flex items-center justify-center px-4">
+  <div class="max-w-2xl w-full text-center space-y-8">
+    <div class="space-y-4">
+      <h1
+        data-testid="welcome-heading"
+        class="text-5xl font-bold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
+      >
+        Welcome to Budget Calculator
+      </h1>
+      <p data-testid="welcome-description" class="text-xl text-gray-700 leading-relaxed">
+        Create professional quotes for your freelance services including SEO optimization, Google
+        Ads campaigns, and custom web development projects. Configure your services, calculate costs
+        instantly, and share quotes with your clients.
+      </p>
+    </div>
+
+    <div class="space-y-4">
+      <button
+        data-testid="start-button"
+        (click)="navigateToBudget()"
+        class="px-8 py-4 bg-linear-to-r from-blue-600 to-purple-600 text-white text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-300"
+      >
+        Get Started
+      </button>
+      <p class="text-sm text-gray-600">No registration required • Free to use</p>
+    </div>
+  </div>
+</div>
