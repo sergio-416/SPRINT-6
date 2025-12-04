@@ -11,4 +11,8 @@ export const routes: Routes = [
     path: 'budget',
     component: ProductsForm,
   },
+  {
+    path: '**',
+    redirectTo: '',
+  },
 ];

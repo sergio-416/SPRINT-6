@@ -149,7 +149,7 @@ describe('ProductsForm', () => {
     component.quoteModel.update((current) => ({
       ...current,
       clientName: 'John Doe',
-      phone: '123-456-7890',
+      phone: '666777888',
       email: 'john@example.com',
       seoSelected: true,
     }));
@@ -167,7 +167,7 @@ describe('ProductsForm', () => {
     component.quoteModel.update((current) => ({
       ...current,
       clientName: 'John Doe',
-      phone: '123-456-7890',
+      phone: '777888999',
       email: 'john@example.com',
       seoSelected: true,
     }));
@@ -444,7 +444,7 @@ describe('URL state synchronization', () => {
     component.quoteModel.update((current) => ({
       ...current,
       clientName: 'Test User',
-      phone: '555-0000',
+      phone: '666777888',
       email: 'test@example.com',
       seoSelected: true,
     }));

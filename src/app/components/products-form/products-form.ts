@@ -9,7 +9,7 @@ import {
   untracked,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { Field, form, min, required, email as emailValidator } from '@angular/forms/signals';
+import { Field, form, min, required } from '@angular/forms/signals';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { QuoteFormModel } from '../../models/quote-form';
 import { SortOption, SortDirection } from '../../models/sort-option';
@@ -17,6 +17,7 @@ import { Budget } from '../../services/budget';
 import { WebsitePanel } from '../website-panel/website-panel';
 import { PageHeader } from '../page-header/page-header';
 import { BudgetsList } from '../budgets-list/budgets-list';
+import { spanishPhone, enhancedEmail, clientName } from '../../validators/custom-validators';
 
 @Component({
   selector: 'app-products-form',
@@ -50,9 +51,22 @@ export class ProductsForm {
 
   quoteForm = form(this.quoteModel, (schemaPath) => {
     required(schemaPath.clientName, { message: 'Client name is required' });
+    clientName(schemaPath.clientName, {
+      message: 'Please enter a valid name (letters, spaces, hyphens, and apostrophes only)',
+      minLength: 2,
+      maxLength: 100,
+    });
+
     required(schemaPath.phone, { message: 'Phone is required' });
+    spanishPhone(schemaPath.phone, {
+      message: 'Please enter a valid Spanish phone number (9 digits starting with 6 or 7)',
+    });
+
     required(schemaPath.email, { message: 'Email is required' });
-    emailValidator(schemaPath.email, { message: 'Valid email is required' });
+    enhancedEmail(schemaPath.email, {
+      message: 'Please enter a valid email address',
+    });
+
     min(schemaPath.webConfig.pages, 1, { message: 'Pages must be at least 1' });
     min(schemaPath.webConfig.languages, 1, { message: 'Languages must be at least 1' });
   });
