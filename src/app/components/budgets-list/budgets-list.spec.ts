@@ -1,3 +1,5 @@
+// Unit tests for BudgetsList component
+// Tests quote display with empty state and card rendering - references budgets-list.ts
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BudgetsList } from './budgets-list';
 import { Quote } from '../../models/quote';
@@ -6,6 +8,7 @@ describe('BudgetsList', () => {
   let component: BudgetsList;
   let fixture: ComponentFixture<BudgetsList>;
 
+  // Mock quotes data for testing
   const mockQuotes: Quote[] = [
     {
       id: '1',
@@ -29,6 +32,7 @@ describe('BudgetsList', () => {
     },
   ];
 
+  // Sets up test environment before each test
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [BudgetsList],
@@ -38,12 +42,14 @@ describe('BudgetsList', () => {
     component = fixture.componentInstance;
   });
 
+  // Verifies component instantiates correctly
   it('should create the component', () => {
     fixture.componentRef.setInput('quotes', []);
     fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 
+  // Tests empty state message displays when no quotes
   it('should display message when no quotes exist', () => {
     fixture.componentRef.setInput('quotes', []);
     fixture.detectChanges();
@@ -54,6 +60,7 @@ describe('BudgetsList', () => {
     expect(emptyMessage.textContent).toContain('No quotes created yet');
   });
 
+  // Tests quote cards render when quotes exist
   it('should render quote cards when quotes exist', () => {
     fixture.componentRef.setInput('quotes', mockQuotes);
     fixture.detectChanges();
@@ -63,6 +70,7 @@ describe('BudgetsList', () => {
     expect(quoteCards.length).toBe(2);
   });
 
+  // Tests client name displays in quote card
   it('should display client name in quote card', () => {
     fixture.componentRef.setInput('quotes', [mockQuotes[0]]);
     fixture.detectChanges();
@@ -72,6 +80,7 @@ describe('BudgetsList', () => {
     expect(clientName.textContent).toContain('John Doe');
   });
 
+  // Tests total price displays in quote card
   it('should display total price in quote card', () => {
     fixture.componentRef.setInput('quotes', [mockQuotes[0]]);
     fixture.detectChanges();
@@ -81,6 +90,7 @@ describe('BudgetsList', () => {
     expect(totalPrice.textContent).toContain('€300');
   });
 
+  // Tests selected services display correctly
   it('should display selected services', () => {
     fixture.componentRef.setInput('quotes', [mockQuotes[0]]);
     fixture.detectChanges();

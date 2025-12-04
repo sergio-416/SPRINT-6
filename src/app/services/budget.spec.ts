@@ -1,3 +1,5 @@
+// Unit tests for Budget service
+// Tests price calculations and quote management - references budget.ts
 import { TestBed } from '@angular/core/testing';
 import { Budget } from './budget';
 import { Quote } from '../models/quote';
@@ -5,6 +7,7 @@ import { Quote } from '../models/quote';
 describe('Budget', () => {
   let service: Budget;
 
+  // Sets up test environment and injects Budget service before each test
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [Budget],
@@ -13,32 +16,39 @@ describe('Budget', () => {
   });
 
   describe('Price Calculations', () => {
+    // Tests website customization cost formula: pages × languages × €30
     it('should calculate website price correctly', () => {
       expect(service.calculateWebsitePrice(2, 3)).toBe(180);
     });
 
+    // Tests SEO service price calculation
     it('should calculate total price with only SEO', () => {
       expect(service.calculateTotalPrice(true, false, false, 1, 1)).toBe(300);
     });
 
+    // Tests Ads service price calculation
     it('should calculate total price with only Ads', () => {
       expect(service.calculateTotalPrice(false, true, false, 1, 1)).toBe(400);
     });
 
+    // Tests Web service base price plus default customization (1 page × 1 language × €30)
     it('should calculate total price with Web default config', () => {
       expect(service.calculateTotalPrice(false, false, true, 1, 1)).toBe(530);
     });
 
+    // Tests combined price of all three services with default configuration
     it('should calculate total price with all services', () => {
       expect(service.calculateTotalPrice(true, true, true, 1, 1)).toBe(1230);
     });
   });
 
   describe('Quote Management', () => {
+    // Verifies service initializes with empty quotes array
     it('should start with empty quotes array', () => {
       expect(service.quotes().length).toBe(0);
     });
 
+    // Tests adding single quote to collection
     it('should add a quote to the collection', () => {
       const quote: Quote = {
         id: '1',
@@ -64,6 +74,7 @@ describe('Budget', () => {
       expect(service.quotes()[0]).toEqual(quote);
     });
 
+    // Tests adding multiple quotes to collection
     it('should add multiple quotes to the collection', () => {
       const quote1: Quote = {
         id: '1',
@@ -95,6 +106,7 @@ describe('Budget', () => {
       expect(service.quotes()[1]).toEqual(quote2);
     });
 
+    // Tests unique ID generation using crypto.randomUUID()
     it('should generate unique IDs for quotes', () => {
       const quoteData = {
         clientName: 'Test Client',

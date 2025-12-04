@@ -1,6 +1,10 @@
+<!-- Website configuration panel - pages and languages controls with help modals -->
+<!-- Used in products-form.html when web service selected, receives webConfigFields from products-form.ts -->
 <div class="border-t border-gray-200 pt-6 mt-4">
   <div class="flex flex-col gap-4 items-end">
+    <!-- Pages configuration row -->
     <div class="flex items-center gap-6 w-full justify-end">
+      <!-- Pages label with icon and help button -->
       <div class="flex items-center gap-1.5">
         <svg class="w-3.5 h-3.5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
           <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
@@ -11,6 +15,7 @@
           />
         </svg>
         <label class="text-xs font-medium text-gray-700 whitespace-nowrap">Number of Pages</label>
+        <!-- Opens help modal with pages explanation -->
         <button
           type="button"
           (click)="openPagesHelp()"
@@ -28,7 +33,9 @@
         </button>
       </div>
 
+      <!-- Pages increment/decrement controls with input -->
       <div class="flex items-center gap-2">
+        <!-- Decrement button - prevents going below 1 -->
         <button
           type="button"
           (click)="decrementPages()"
@@ -37,12 +44,14 @@
         >
           −
         </button>
+        <!-- Number input bound to Signal Forms field -->
         <input
           type="number"
           [field]="webConfigFields().pages"
           class="w-16 h-7 px-3 text-center text-sm font-medium border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-400"
           data-testid="pages-input"
         />
+        <!-- Increment button - no upper limit -->
         <button
           type="button"
           (click)="incrementPages()"
@@ -54,6 +63,7 @@
       </div>
     </div>
 
+    <!-- Pages validation errors display -->
     @if (webConfigFields().pages().touched() && webConfigFields().pages().invalid()) {
     <div class="text-xs text-red-600 w-full text-right pr-4">
       @for (error of webConfigFields().pages().errors(); track error) {
@@ -62,7 +72,9 @@
     </div>
     }
 
+    <!-- Languages configuration row - mirrors pages structure -->
     <div class="flex items-center gap-6 w-full justify-end">
+      <!-- Languages label with icon and help button -->
       <div class="flex items-center gap-1.5">
         <svg class="w-3.5 h-3.5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
           <path
@@ -74,6 +86,7 @@
         <label class="text-xs font-medium text-gray-700 whitespace-nowrap"
           >Number of Languages</label
         >
+        <!-- Opens help modal with languages explanation -->
         <button
           type="button"
           (click)="openLanguagesHelp()"
@@ -91,7 +104,9 @@
         </button>
       </div>
 
+      <!-- Languages increment/decrement controls with input -->
       <div class="flex items-center gap-2">
+        <!-- Decrement button - prevents going below 1 -->
         <button
           type="button"
           (click)="decrementLanguages()"
@@ -100,12 +115,14 @@
         >
           −
         </button>
+        <!-- Number input bound to Signal Forms field -->
         <input
           type="number"
           [field]="webConfigFields().languages"
           class="w-16 h-7 px-3 text-center text-sm font-medium border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400 focus:border-blue-400"
           data-testid="languages-input"
         />
+        <!-- Increment button - no upper limit -->
         <button
           type="button"
           (click)="incrementLanguages()"
@@ -117,6 +134,7 @@
       </div>
     </div>
 
+    <!-- Languages validation errors display -->
     @if (webConfigFields().languages().touched() && webConfigFields().languages().invalid()) {
     <div class="text-xs text-red-600 w-full text-right pr-4">
       @for (error of webConfigFields().languages().errors(); track error) {
@@ -126,6 +144,7 @@
     }
   </div>
 
+  <!-- Help modal instances - references help-modal.ts, content from help-content.ts -->
   <app-help-modal
     #pagesModal
     [title]="helpContent.PAGES.title"

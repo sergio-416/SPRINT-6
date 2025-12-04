@@ -1,3 +1,5 @@
+// Unit tests for WelcomePage component
+// Tests rendering and navigation functionality - references welcome-page.ts
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
 import { Location } from '@angular/common';
@@ -10,6 +12,7 @@ describe('WelcomePage', () => {
   let router: Router;
   let location: Location;
 
+  // Sets up test environment with routing configured
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [WelcomePage],
@@ -31,10 +34,12 @@ describe('WelcomePage', () => {
     fixture.detectChanges();
   });
 
+  // Verifies component instantiates correctly
   it('should create the component', () => {
     expect(component).toBeTruthy();
   });
 
+  // Tests heading element renders with expected text
   it('should render welcome heading', () => {
     const compiled = fixture.nativeElement;
     const heading = compiled.querySelector('[data-testid="welcome-heading"]');
@@ -42,12 +47,14 @@ describe('WelcomePage', () => {
     expect(heading.textContent).toContain('Welcome');
   });
 
+  // Tests description text renders
   it('should render description text', () => {
     const compiled = fixture.nativeElement;
     const description = compiled.querySelector('[data-testid="welcome-description"]');
     expect(description).not.toBeNull();
   });
 
+  // Tests navigation button renders as button element
   it('should render navigation button', () => {
     const compiled = fixture.nativeElement;
     const button = compiled.querySelector('[data-testid="start-button"]');
@@ -55,6 +62,7 @@ describe('WelcomePage', () => {
     expect(button.tagName).toBe('BUTTON');
   });
 
+  // Tests button click triggers navigation to /budget route
   it('should navigate to budget page when button is clicked', async () => {
     const compiled = fixture.nativeElement;
     const button = compiled.querySelector('[data-testid="start-button"]') as HTMLButtonElement;
@@ -67,6 +75,7 @@ describe('WelcomePage', () => {
     expect(location.path()).toBe('/budget');
   });
 
+  // Tests button has accessible text content
   it('should have accessible button text', () => {
     const compiled = fixture.nativeElement;
     const button = compiled.querySelector('[data-testid="start-button"]');

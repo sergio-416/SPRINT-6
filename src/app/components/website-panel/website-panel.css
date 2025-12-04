@@ -1,9 +1,12 @@
+/* Removes default number input spinner controls for cleaner UI */
+/* Webkit browsers (Chrome, Safari, Edge) */
 input[type='number']::-webkit-outer-spin-button,
 input[type='number']::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
+/* Firefox and other browsers */
 input[type='number'] {
   -moz-appearance: textfield;
   appearance: textfield;

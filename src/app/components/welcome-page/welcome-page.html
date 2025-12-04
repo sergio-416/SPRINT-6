@@ -1,12 +1,16 @@
+<!-- Welcome page template - landing page with call-to-action -->
+<!-- Used in welcome-page.ts, routes to /budget via navigateToBudget() -->
 <div class="min-h-screen flex items-center justify-center px-4">
   <div class="max-w-2xl w-full text-center space-y-8">
     <div class="space-y-4">
+      <!-- Main heading with gradient text effect -->
       <h1
         data-testid="welcome-heading"
         class="text-5xl font-bold bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
       >
         Welcome to Budget Calculator
       </h1>
+      <!-- Descriptive text explaining app features -->
       <p data-testid="welcome-description" class="text-xl text-gray-700 leading-relaxed">
         Create professional quotes for your freelance services including SEO optimization, Google
         Ads campaigns, and custom web development projects. Configure your services, calculate costs
@@ -15,6 +19,7 @@
     </div>
 
     <div class="space-y-4">
+      <!-- Primary CTA button - navigates to /budget route -->
       <button
         data-testid="start-button"
         (click)="navigateToBudget()"
@@ -22,6 +27,7 @@
       >
         Get Started
       </button>
+      <!-- Feature highlights -->
       <p class="text-sm text-gray-600">No registration required • Free to use</p>
     </div>
   </div>

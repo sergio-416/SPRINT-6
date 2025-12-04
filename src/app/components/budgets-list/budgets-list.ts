@@ -1,3 +1,6 @@
+// Budgets list component - displays saved quotes with formatted service details
+// Standalone component with OnPush detection - template in budgets-list.html
+// Used in products-form.html, receives filtered/sorted quotes array as input
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Quote } from '../../models/quote';
 
@@ -8,8 +11,11 @@ import { Quote } from '../../models/quote';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BudgetsList {
+  // Input signal receives quotes array from parent component
   quotes = input.required<Quote[]>();
 
+  // Formats quote services into human-readable text
+  // Returns services joined with ' + ' separator, includes web config details
   getServicesText(quote: Quote): string {
     const services: string[] = [];
     if (quote.services.seo) services.push('SEO');

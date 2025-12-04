@@ -1,13 +1,20 @@
+<!-- Main quote calculator form - handles client info, service selection, and quote management -->
+<!-- Used in products-form.ts, displays budgets-list.ts and website-panel.ts components -->
 <div class="max-w-4xl mx-auto px-4 py-8">
+  <!-- Page header component - references page-header.ts -->
   <app-page-header />
 
+  <!-- Main quote creation form - submits via onSubmit() -->
   <form (submit)="onSubmit($event)" class="flex flex-col gap-6">
+    <!-- Client information section -->
     <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
       <h2 class="text-xl font-bold text-gray-900 mb-4">Client Information</h2>
 
       <div class="flex flex-col gap-4">
+        <!-- Client name input with validation -->
         <div>
           <label for="client-name" class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+          <!-- Bound to Signal Forms via [field] directive -->
           <input
             id="client-name"
             type="text"
@@ -20,6 +27,7 @@
             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             data-testid="client-name"
           />
+          <!-- Validation errors - only shown after field touched and if invalid -->
           @if (quoteForm.clientName().touched() && quoteForm.clientName().invalid() &&
           !formJustReset()) {
           <div id="name-error" class="text-sm text-red-600 mt-1" role="alert" aria-live="polite">
@@ -30,7 +38,9 @@
           }
         </div>
 
+        <!-- Phone and email inputs in responsive grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Phone input with Spanish phone validation -->
           <div>
             <label for="client-phone" class="block text-sm font-medium text-gray-700 mb-2"
               >Phone</label
@@ -45,6 +55,7 @@
               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               data-testid="client-phone"
             />
+            <!-- Phone validation errors -->
             @if (quoteForm.phone().touched() && quoteForm.phone().invalid() && !formJustReset()) {
             <div id="phone-error" class="text-sm text-red-600 mt-1" role="alert" aria-live="polite">
               @for (error of quoteForm.phone().errors(); track error) {
@@ -54,6 +65,7 @@
             }
           </div>
 
+          <!-- Email input with enhanced email validation -->
           <div>
             <label for="client-email" class="block text-sm font-medium text-gray-700 mb-2"
               >Email</label
@@ -68,6 +80,7 @@
               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               data-testid="client-email"
             />
+            <!-- Email validation errors with typo detection -->
             @if (quoteForm.email().touched() && quoteForm.email().invalid() && !formJustReset()) {
             <div id="email-error" class="text-sm text-red-600 mt-1" role="alert" aria-live="polite">
               @for (error of quoteForm.email().errors(); track error) {
@@ -80,18 +93,21 @@
       </div>
     </div>
 
+    <!-- SEO service card - €300 -->
     <div
       class="bg-white rounded-lg shadow-md border-2 p-6"
       [class.border-blue-600]="quoteForm.seoSelected().value()"
       [class.border-gray-200]="!quoteForm.seoSelected().value()"
     >
       <div class="flex items-start justify-between">
+        <!-- Service description -->
         <div class="flex-1">
           <h2 class="text-2xl font-bold text-gray-900 mb-2">SEO</h2>
           <p class="text-sm text-gray-600 mb-4">
             Optimize your website's visibility in search engines
           </p>
         </div>
+        <!-- Price and selection checkbox -->
         <div class="flex items-center gap-4">
           <span class="text-3xl font-bold text-gray-900">€{{ budgetService.SEO_PRICE }}</span>
           <label class="flex items-center cursor-pointer">
@@ -107,16 +123,19 @@
       </div>
     </div>
 
+    <!-- Ads service card - €400 -->
     <div
       class="bg-white rounded-lg shadow-md border-2 p-6"
       [class.border-blue-600]="quoteForm.adsSelected().value()"
       [class.border-gray-200]="!quoteForm.adsSelected().value()"
     >
       <div class="flex items-start justify-between">
+        <!-- Service description -->
         <div class="flex-1">
           <h2 class="text-2xl font-bold text-gray-900 mb-2">Ads</h2>
           <p class="text-sm text-gray-600 mb-4">Run targeted advertising campaigns on Google</p>
         </div>
+        <!-- Price and selection checkbox -->
         <div class="flex items-center gap-4">
           <span class="text-3xl font-bold text-gray-900">€{{ budgetService.ADS_PRICE }}</span>
           <label class="flex items-center cursor-pointer">
@@ -132,16 +151,19 @@
       </div>
     </div>
 
+    <!-- Web service card - €500 + customization -->
     <div
       class="bg-white rounded-lg shadow-md border-2 p-6"
       [class.border-blue-600]="quoteForm.webConfig.selected().value()"
       [class.border-gray-200]="!quoteForm.webConfig.selected().value()"
     >
       <div class="flex items-start justify-between mb-4">
+        <!-- Service description -->
         <div class="flex-1">
           <h2 class="text-2xl font-bold text-gray-900 mb-2">Web</h2>
           <p class="text-sm text-gray-600 mb-4">Custom responsive website development</p>
         </div>
+        <!-- Base price and selection checkbox -->
         <div class="flex items-center gap-4">
           <span class="text-3xl font-bold text-gray-900">€{{ budgetService.WEB_BASE_PRICE }}</span>
           <label class="flex items-center cursor-pointer">
@@ -156,11 +178,13 @@
         </div>
       </div>
 
+      <!-- Website configuration panel - shown when web service selected -->
       @if (quoteForm.webConfig.selected().value()) {
       <app-website-panel [webConfigFields]="quoteForm.webConfig" />
       }
     </div>
 
+    <!-- Total price display - computed in products-form.ts -->
     <div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
       <div class="flex items-center justify-between">
         <span class="text-xl font-semibold text-gray-900">Estimated Budget:</span>
@@ -170,6 +194,7 @@
       </div>
     </div>
 
+    <!-- Submit button - disabled when form invalid -->
     <div class="flex justify-end">
       <button
         type="submit"
@@ -181,11 +206,13 @@
     </div>
   </form>
 
+  <!-- Saved quotes section with search and sort controls -->
   <div class="mt-8">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-2xl font-bold text-gray-900">Saved Quotes</h2>
 
       <div class="flex items-center gap-4">
+        <!-- Search input - filters quotes by client name -->
         <div class="relative">
           <label for="search-input" class="sr-only">Search quotes by client name</label>
           <input
@@ -213,7 +240,9 @@
           </svg>
         </div>
 
+        <!-- Sort buttons - toggles between asc/desc on re-click -->
         <div class="flex gap-2" role="group" aria-label="Sort quotes">
+          <!-- Sort by date button -->
           <button
             type="button"
             (click)="onSortChange('date')"
@@ -235,6 +264,7 @@
             data-testid="sort-date"
           >
             Date @if (sortBy() === 'date') {
+            <!-- Sort direction indicator arrow -->
             <svg
               class="w-4 h-4"
               fill="none"
@@ -260,6 +290,7 @@
             </svg>
             }
           </button>
+          <!-- Sort by price button -->
           <button
             type="button"
             (click)="onSortChange('price')"
@@ -306,6 +337,7 @@
             </svg>
             }
           </button>
+          <!-- Sort by name button -->
           <button
             type="button"
             (click)="onSortChange('name')"
@@ -355,6 +387,7 @@
       </div>
     </div>
 
+    <!-- Budgets list component - displays filtered and sorted quotes -->
     <app-budgets-list [quotes]="filteredAndSortedQuotes()" />
   </div>
 </div>

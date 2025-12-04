@@ -1,3 +1,5 @@
+<!-- Help modal dialog - displays contextual help information -->
+<!-- Used in help-modal.ts, embedded in website-panel.html -->
 <dialog
   #dialogElement
   (click)="onBackdropClick($event)"
@@ -6,7 +8,9 @@
   [attr.aria-labelledby]="'modal-title-' + title()"
   class="p-0 m-0 border-0 bg-transparent max-w-lg w-full rounded-2xl"
 >
+  <!-- Modal content container -->
   <div class="bg-white rounded-2xl shadow-2xl p-10 mx-4">
+    <!-- Modal title - dynamically set via input signal -->
     <h2
       [id]="'modal-title-' + title()"
       class="text-xl font-bold text-center text-gray-900 mb-4"
@@ -15,6 +19,7 @@
       {{ title() }}
     </h2>
 
+    <!-- Modal content - dynamically set via input signal -->
     <div class="text-center" data-testid="modal-content">
       <p class="text-sm text-gray-700 leading-relaxed">{{ content() }}</p>
     </div>
