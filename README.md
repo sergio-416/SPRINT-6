@@ -12,6 +12,7 @@ A modern, professional quote calculator application built with Angular v21, desi
 - 💵 **Real-time Calculation** - Instant price updates as services are configured
 - 📋 **Quote Management** - Save, search, and sort multiple client quotes
 - 🔗 **Shareable URLs** - Share exact quote configurations via URL parameters
+- ✅ **Custom Validators** - Spanish phone, enhanced email, and client name validation
 - 🔍 **Advanced Filtering** - Search by client name with case-insensitive matching
 - 📊 **Flexible Sorting** - Sort by date, price, or name with direction toggle
 - ♿ **Full Accessibility** - WCAG 2.1 AA compliant with ARIA support
@@ -22,14 +23,13 @@ A modern, professional quote calculator application built with Angular v21, desi
 
 ![alt text](./screenshots/main.png)
 
-
 ## 🛠️ Tech Stack
 
 - **Framework:** Angular v21.0.0
 - **Language:** TypeScript 5.9
 - **Styling:** Tailwind CSS v4.1.12
 - **Forms:** Angular Signal Forms
-- **Testing:** Vitest 4.0.8 with 79 passing tests
+- **Testing:** Vitest 4.0.8 with 144 passing tests
 - **Package Manager:** Bun v1.3.3
 - **Server:** Express v5.1.0 with SSR support
 
@@ -51,8 +51,11 @@ src/
 │   │   ├── quote.ts              # Quote interface
 │   │   ├── quote-form.ts         # Form model
 │   │   └── sort-option.ts        # Sort types
-│   └── services/
-│       └── budget.ts             # Price calculation service
+│   ├── services/
+│   │   └── budget.ts             # Price calculation service
+│   └── validators/
+│       ├── custom-validators.ts       # Custom form validators
+│       └── custom-validators.spec.ts  # Validator tests
 ├── styles.css                     # Global styles + Tailwind
 └── index.html                     # App entry point
 ```
@@ -89,8 +92,9 @@ bun run test:ui    # Run tests with UI
 
 ## 🧪 Testing
 
-Comprehensive test coverage with **79 passing tests** across all components:
+Comprehensive test coverage with **144 passing tests** across all components:
 
+- ✅ **65 tests** - Custom Validators (phone, email, name validation + integration)
 - ✅ **33 tests** - ProductsForm (form logic, calculations, URL sync)
 - ✅ **15 tests** - WebsitePanel (increment/decrement, validation)
 - ✅ **9 tests** - Budget Service (price calculations, quote management)
@@ -119,17 +123,27 @@ bun run test:ui    # Interactive test UI
 
 ### Key Features Implementation
 
+**Custom Validators**
+
+- Spanish phone validator (9 digits, starts with 6 or 7)
+- Enhanced email validator with typo detection (gmial.com, yahooo.com)
+- Client name validator with Spanish character support (á, é, í, ó, ú, ñ)
+- Security checks against XSS and SQL injection attempts
+
 **URL State Synchronization**
+
 - Bidirectional sync between form state and URL query parameters
 - Enables shareable quote configurations
 - Uses `toSignal()` for Observable-to-Signal conversion
 
 **Price Calculation**
+
 - Single source of truth in Budget service
 - Real-time computed pricing with signals
 - Customizable rates per service type
 
 **Search & Sort**
+
 - Case-insensitive client name filtering
 - Three sort criteria: date, price, name
 - Bidirectional sort direction toggle
@@ -149,6 +163,7 @@ WCAG 2.1 AA compliant with comprehensive ARIA support:
 ## 🎨 Design System
 
 **Tailwind CSS v4** with modern utility classes:
+
 - Gradient text effects
 - Consistent spacing scale
 - Responsive design patterns
